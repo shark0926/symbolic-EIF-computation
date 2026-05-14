@@ -1,0 +1,10 @@
+{
+  "expressible": true,
+  "variables": ["Y"],
+  "nodes": [
+    {"id": "n1", "type": "RandomVariable", "var_name": "Y"},
+    {"id": "n2", "type": "ConstantMap", "dep": "n1"},
+    {"id": "n3", "type": "MarginalMean", "dep": "n2"}
+  ],
+  "output_node": "n3"
+}

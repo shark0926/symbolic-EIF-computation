@@ -1,0 +1,35 @@
+{
+  "expressible": true,
+  "variables": ["Y", "A", "X", "W"],
+  "nodes": [
+    {"id": "n1", "type": "RandomVariable", "var_name": "Y"},
+    {"id": "n2", "type": "ConstantMap", "dep": "n1"},
+    {"id": "n3", "type": "ConditionalMean", "dep": "n2", "given": ["A", "X", "W"]},
+    {"id": "n4", "type": "FixBinaryArgument", "dep": "n3", "binary_var": "A", "value": 1},
+    {"id": "n5", "type": "FixBinaryArgument", "dep": "n3", "binary_var": "A", "value": 0},
+    {
+      "id": "n6", "type": "PointwiseOperation",
+      "l2_inputs": ["n4", "n5"],
+      "func": "h0 - h1",
+      "partials": ["Const(1)", "Const(-1)"]
+    },
+    {"id": "n7", "type": "RandomVariable", "var_name": "W"},
+    {"id": "n8", "type": "ConstantMap", "dep": "n7"},
+    {"id": "n9", "type": "LiftToDomain", "l2x_node": "n6"},
+    {
+      "id": "n10", "type": "PointwiseOperation",
+      "l2_inputs": ["n8", "n9"],
+      "func": "h0 * h1",
+      "partials": ["h1", "h0"]
+    },
+    {"id": "n11", "type": "MarginalMean", "dep": "n10"},
+    {"id": "n12", "type": "MarginalMean", "dep": "n8"},
+    {
+      "id": "n13", "type": "DifferentiableFunction",
+      "scalar_inputs": ["n11", "n12"],
+      "func": "h0 / h1",
+      "partials": ["Const(1) / h1", "Const(-1) * h0 / h1 ** Const(2)"]
+    }
+  ],
+  "output_node": "n13"
+}

@@ -1,0 +1,22 @@
+{
+  "expressible": true,
+  "variables": ["Y", "A", "X"],
+  "nodes": [
+    {"id": "n1", "type": "RandomVariable", "var_name": "Y"},
+    {"id": "n2", "type": "ConstantMap", "dep": "n1"},
+    {"id": "n3", "type": "ConditionalMean", "dep": "n2", "given": ["A", "X"]},
+    {"id": "n4", "type": "FixBinaryArgument", "dep": "n3", "binary_var": "A", "value": 1},
+    {"id": "n5", "type": "LiftToDomain", "l2x_node": "n4"},
+    {"id": "n6", "type": "MarginalMean", "dep": "n5"},
+    {"id": "n7", "type": "FixBinaryArgument", "dep": "n3", "binary_var": "A", "value": 0},
+    {"id": "n8", "type": "LiftToDomain", "l2x_node": "n7"},
+    {"id": "n9", "type": "MarginalMean", "dep": "n8"},
+    {
+      "id": "n10", "type": "DifferentiableFunction",
+      "scalar_inputs": ["n6", "n9"],
+      "func": "h0 - h1",
+      "partials": ["Const(1)", "Const(-1)"]
+    }
+  ],
+  "output_node": "n10"
+}
